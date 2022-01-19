@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 import argparse
+import binascii
 import os
 import sys
 from scapy.all import *
+
+from frame import decrypt_frame
 
 
 def main():
@@ -18,8 +21,12 @@ def main():
         print('"{}" does not exist',format(file_name), file=sys.stderr)
         sys.exit(-1)
 
-    
-    #radiotap_pkts = process_pcap(file_name)
+    key = binascii.a2b_hex("c97c1f67ce371185514a8a19f2bdd52f")  #sample.pcapng key
+    #key = binascii.a2b_hex("43e3229c41fec8fb81222388c0b5d3d3")  #single.pcapng key
+
+    for (pkt_data, pkt_metadata) in RawPcapNgReader(file_name):
+        radiotap_pkt = RadioTap(pkt_data)
+        decrypt_frame(radiotap_pkt, key)
 
 if __name__ == "__main__":
     main()
