@@ -1,0 +1,3 @@
+scapy >= 2.4.5rc1
+pycryptodome
+
