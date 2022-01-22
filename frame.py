@@ -11,7 +11,7 @@ def build_AAD(packet):
     offset = 0
     FCarray = bytearray(p[offset:offset+2])
     offset += 4
-    FCarray[0] = FCarray[0] & 0x0f
+    FCarray[0] = FCarray[0] & 0x8f
     if packet.haslayer(Dot11QoS):
         FCarray[1] = (FCarray[1] & 0x47) | 0x40
     else:
@@ -43,7 +43,6 @@ def build_AAD(packet):
         QCarray = bytearray(p[offset:offset+2])
         QCarray[0] = QCarray[0] & 0x0f
         QCarray[1] = QCarray[1] & 0x00
-        print(f'{QCarray=}')
         QC = bytes(QCarray)
         print(f'QC = {QC.hex()}')
     AAD = FC + A1 + A2 + A3 + SC + A4 + QC
